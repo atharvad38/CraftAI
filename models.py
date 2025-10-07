@@ -1,5 +1,5 @@
 #schema of all outputs
-from pydantic import BaseModel,Field
+from pydantic import BaseModel,Field,ConfigDict
 from typing import Optional
 
 
@@ -8,6 +8,7 @@ from typing import Optional
 class state(BaseModel):
     user_prompt: str
     plan:Optional[str] = None
+    architect_plan:Optional[str] = None
 
 #planner agent
 # class plan(BaseModel):
@@ -45,3 +46,14 @@ class Plan(BaseModel):
     
     inspiration: str = Field(description="List of similar apps or inspirations to follow or improve upon")
     constraints: str = Field(description="Any design, ethical, or platform constraints (e.g., must be mobile-friendly, data privacy compliance)")
+
+
+# architcture agent
+
+class ImplementationTask(BaseModel):
+    filepath: str = Field(description="The path to the file to be modified")
+    task_description: str = Field(description="A detailed description of the task to be performed on the file, e.g. 'add user authentication', 'implement data processing logic', etc.")
+    
+class TaskPlan(BaseModel):
+    implementation_steps: list[ImplementationTask] = Field(description="A list of steps to be taken to implement the task")
+    model_config = ConfigDict(extra="allow")  #the purpose of this is to allow extra elements
